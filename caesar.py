@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 from sys import exit,argv
+import os
 
 class caesarCipher :
     teks = None
@@ -27,6 +28,21 @@ class caesarCipher :
     def __repr__(self):
         return caesarCipher.teks
 
+def createOutput(fileName, fileContent):
+    folderName = "output"
+    if not os.path.exists(folderName):
+        os.mkdir(folderName)
+        #os.chmod(folderName, 644)
+    else:
+        fileName = folderName + "/" + fileName
+        createFile = open(fileName,"w")
+        createFile.write(fileContent)
+        if os.path.exists(fileName):
+            print("Creating",fileName,"succesful!")
+        else:
+            print("Fail to create",fileName)
+        createFile.close()
+
 print(
 """                         _____         _
  ___ ___ ___ ___ ___ ___| __  |___ _ _| |_ ___
@@ -35,14 +51,23 @@ print(
 [ Caesar Cipher Brute Forcer ]""")
 
 if len(argv) != 2 :
-    print("[ ./caesar.py <ciphertext string> ]")
+    print("[ ./caesar.py <cipher text/file> ]")
     exit()
 else:
-    string = argv[1]
+    userArg = argv[1]
 
-print()
+if os.path.isfile(userArg):
+    cipherString = open(userArg,"r").read()
+    createFile = True
+else:
+    cipherString = userArg
+    createFile = False
 
-for shift in range(1,27):
-    caesar = caesarCipher(string,shift)
+for shift in range(26):
+    caesar = caesarCipher(cipherString,shift + 1)
     caesar.caesarDecrypt()
-    print(shift, caesar, sep = " : ")
+    if createFile:
+        fileName = "shift%d.txt" % (shift + 1)
+        createOutput(fileName,str(caesar))
+    else:
+        print(shift + 1,caesar,sep = " : ")
