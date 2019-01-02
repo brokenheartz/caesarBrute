@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 
 from sys import exit,argv
-import os
+from colorama import Fore, Style
+import os, random
 
 class caesarCipher :
     teks = None
@@ -43,12 +44,22 @@ def createOutput(fileName, fileContent):
             print("Fail to create",fileName)
         createFile.close()
 
-print(
+print( Style.BRIGHT + Fore.WHITE + 
 """                         _____         _
  ___ ___ ___ ___ ___ ___| __  |___ _ _| |_ ___
 |  _| .'| -_|_ -| .'|  _| __ -|  _| | |  _| -_|
 |___|__,|___|___|__,|_| |_____|_| |___|_| |___|
-[ Caesar Cipher Brute Forcer ]""")
+""" + Fore.RED +
+"[ Caesar Cipher Brute Forcer ]".strip())
+
+color = [
+    Style.BRIGHT + Fore.RED,
+    Style.BRIGHT + Fore.WHITE,
+    Style.BRIGHT + Fore.GREEN,
+    Style.BRIGHT + Fore.YELLOW,
+    Style.BRIGHT + Fore.CYAN,
+    Style.BRIGHT + Fore.MAGENTA
+]
 
 if len(argv) != 2 :
     print("[ ./caesar.py <cipher text/file> ]")
@@ -63,6 +74,8 @@ else:
     cipherString = userArg
     createFile = False
 
+print()
+
 for shift in range(26):
     caesar = caesarCipher(cipherString,shift + 1)
     caesar.caesarDecrypt()
@@ -70,4 +83,5 @@ for shift in range(26):
         fileName = "shift%d.txt" % (shift + 1)
         createOutput(fileName,str(caesar))
     else:
-        print(shift + 1,caesar,sep = " : ")
+        ranNumber = random.randint(0,5)
+        print(color[ranNumber],shift + 1, " : ",caesar)
