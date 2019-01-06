@@ -10,6 +10,7 @@ class caesarCipher :
     def __init__(self, text, shift):
         self.text = text
         self.shift = shift
+        self.caesarDecrypt()
 
     def caesarDecrypt(self):
         cipher = self.text
@@ -33,18 +34,16 @@ def createOutput(fileName, fileContent):
     folderName = "output"
     if not os.path.exists(folderName):
         os.mkdir(folderName)
-        #os.chmod(folderName, 644)
+    fileName = folderName + "/" + fileName
+    createFile = open(fileName,"w")
+    createFile.write(fileContent)
+    createFile.close()
+    if os.path.exists(fileName):
+        return True
     else:
-        fileName = folderName + "/" + fileName
-        createFile = open(fileName,"w")
-        createFile.write(fileContent)
-        if os.path.exists(fileName):
-            print("Creating",fileName,"succesful!")
-        else:
-            print("Fail to create",fileName)
-        createFile.close()
+        return False
 
-print( Style.BRIGHT + Fore.WHITE + 
+print( Style.BRIGHT + Fore.WHITE +
 """                         _____         _
  ___ ___ ___ ___ ___ ___| __  |___ _ _| |_ ___
 |  _| .'| -_|_ -| .'|  _| __ -|  _| | |  _| -_|
@@ -77,11 +76,14 @@ else:
 print()
 
 for shift in range(26):
+    ranNumber = random.randint(0,5)
     caesar = caesarCipher(cipherString,shift + 1)
-    caesar.caesarDecrypt()
     if createFile:
         fileName = "shift%d.txt" % (shift + 1)
-        createOutput(fileName,str(caesar))
+        file = createOutput(fileName,str(caesar))
+        if file :
+            print(color[ranNumber] + "Creating", fileName, "succesful!")
+        else:
+            print("Fail to create", fileName)
     else:
-        ranNumber = random.randint(0,5)
         print(color[ranNumber],shift + 1, " : ",caesar)
